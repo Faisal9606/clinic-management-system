@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://clinic-management-system-jdm0.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
   },
