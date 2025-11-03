@@ -9,8 +9,9 @@ services:
     name: clinic-backend
     env: node
     plan: free
-    buildCommand: cd backend && npm install --include=dev && npm run build
-    startCommand: cd backend && npm start
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -28,8 +29,9 @@ services:
     name: clinic-frontend
     env: static
     plan: free
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
     routes:
       - type: rewrite
         source: /*
