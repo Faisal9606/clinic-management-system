@@ -1,16 +1,13 @@
-services:
-  # PostgreSQL Database
-  - type: pserv
-    name: clinic-db
-    env: docker
-    plan: free
-    region: oregon
+databases:
+  - name: clinic-db
+    databaseName: clinic_db
+    user: clinic_user
 
+services:
   # Backend API
   - type: web
     name: clinic-backend
     env: node
-    region: oregon
     plan: free
     buildCommand: cd backend && npm install && npm run build
     startCommand: cd backend && npm start
@@ -23,25 +20,17 @@ services:
         generateValue: true
       - key: NODE_ENV
         value: production
-    healthCheckPath: /api/health
+      - key: PORT
+        value: 10000
 
   # Frontend
   - type: web
     name: clinic-frontend
-    env: node
-    region: oregon
+    env: static
     plan: free
     buildCommand: cd frontend && npm install && npm run build
-    startCommand: npm install -g serve && serve -s frontend/dist -l 3000
-    envVars:
-      - key: VITE_API_URL
-        fromService:
-          type: web
-          name: clinic-backend
-          envVarKey: RENDER_EXTERNAL_URL
-
-databases:
-  - name: clinic-db
-    databaseName: clinic_db
-    user: clinic_user
-    plan: free
+    staticPublishPath: frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
